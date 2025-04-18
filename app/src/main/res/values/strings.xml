@@ -3,4 +3,5 @@
     <string name="text_configMap">Configure Map</string>
     <string name="text_viewMap">View Map</string>
     <string name="marker_title">Your current location</string>
+    <string name="text_removeLine">Remove line</string>
 </resources>

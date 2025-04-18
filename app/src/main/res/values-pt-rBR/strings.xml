@@ -4,4 +4,5 @@
     <string name="text_configMap">Configurar Mapa</string>
     <string name="text_viewMap">Visualizar Mapa</string>
     <string name="marker_title">Sua localização atual.</string>
+    <string name="text_removeLine">Remover linha</string>
 </resources>

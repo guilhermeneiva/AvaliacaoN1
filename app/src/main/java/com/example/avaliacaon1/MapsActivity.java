@@ -25,8 +25,17 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -39,6 +48,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationCallback locationCallback;
 
     private Circle circle;
+
+    private Polyline userPath;
+    private List<LatLng> pahtLine = new ArrayList<>();
 
 
     @Override
@@ -82,7 +94,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onLocationResult(LocationResult locationResult) {
                     super.onLocationResult(locationResult);
                     Location location = locationResult.getLastLocation();
-                    updateMapWithLocation(location);
+                    if (location != null) {
+                        LatLng newLine = new LatLng(location.getLatitude(), location.getLongitude());
+                        pahtLine.add(newLine);
+                        updateMapWithLocation(location);
+                        drawUserPath();
+
+                    }
+
+
                 }
             };
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
@@ -101,10 +121,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         circle = mMap.addCircle(new CircleOptions().
                 center(currentLatLng)
-                .radius(location.getAccuracy()+10)
-                .strokeColor(ContextCompat.getColor(this,R.color.circle_stroke))
+                .radius(location.getAccuracy() + 10)
+                .strokeColor(ContextCompat.getColor(this, R.color.circle_stroke))
                 .fillColor(ContextCompat.getColor(this, R.color.circle_fill))
                 .strokeWidth(3f));
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+
+
     }
 
     @Override
@@ -132,6 +156,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (fusedLocationProviderClient != null) {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback);
             updateMapWithLocation(null);
+        }
+    }
+
+    private void drawUserPath() {
+        if (userPath != null) {
+            userPath.remove();
+        }
+
+        if (pahtLine.size() >= 2) {
+            userPath = mMap.addPolyline(new PolylineOptions()
+                    .addAll(pahtLine)
+                    .color(Color.BLUE)
+                    .width(8f)
+                    .geodesic(true));
         }
     }
 
