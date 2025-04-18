@@ -3,4 +3,5 @@
     <string name="app_name">AvaliacaoN1</string>
     <string name="text_configMap">Configurar Mapa</string>
     <string name="text_viewMap">Visualizar Mapa</string>
+    <string name="marker_title">Sua localização atual.</string>
 </resources>

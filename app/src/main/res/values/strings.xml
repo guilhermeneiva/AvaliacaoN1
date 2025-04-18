@@ -2,5 +2,5 @@
     <string name="app_name">AvaliacaoN1</string>
     <string name="text_configMap">Configure Map</string>
     <string name="text_viewMap">View Map</string>
-    <string name="title_activity_maps">MapsActivity</string>
+    <string name="marker_title">Your current location</string>
 </resources>
