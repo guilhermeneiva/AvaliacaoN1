@@ -1,13 +1,17 @@
 package com.example.avaliacaon1;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Path;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -19,6 +23,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -32,6 +38,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
 
+    private Circle circle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
 
     }
 
@@ -85,6 +94,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(currentLatLng).title(getString(R.string.marker_title)));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f));
+
+        if (circle != null) {
+            circle.remove();
+        }
+
+        circle = mMap.addCircle(new CircleOptions().
+                center(currentLatLng)
+                .radius(location.getAccuracy()+10)
+                .strokeColor(ContextCompat.getColor(this,R.color.circle_stroke))
+                .fillColor(ContextCompat.getColor(this, R.color.circle_fill))
+                .strokeWidth(3f));
     }
 
     @Override
@@ -114,4 +134,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             updateMapWithLocation(null);
         }
     }
+
 }
